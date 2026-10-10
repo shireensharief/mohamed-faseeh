@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 import { person } from "@/data/content";
 import { asset } from "@/lib/asset";
 import "./globals.css";
 
-const grotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
+// Bundled locally (SIL OFL) so CI builds never depend on reaching Google Fonts.
+const grotesk = localFont({
+  src: "../../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
+  weight: "300 700",
   variable: "--font-grotesk",
   display: "swap",
 });
