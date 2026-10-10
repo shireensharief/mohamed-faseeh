@@ -288,6 +288,7 @@ em { color: var(--amber); }
 .badge-stats b { font-size: 30px; font-weight: 500; line-height: 1.1; }
 .badge-stats small { display: block; margin: 6px 0 20px; font-size: 7px; letter-spacing: 1px; }
 .badge-back > .badge-line { font-size: 8px; letter-spacing: 1px; }
+.badge-back .eyebrow.eyebrow { color: var(--cream); }
 .badge-back > small { margin-top: 13px; font-family: var(--serif); font-size: 10px; font-style: italic; }
 .badge-hint { margin-top: -22px; text-align: center; font-size: 9px; }
 .badge-hint > span { margin-right: 8px; vertical-align: middle; font-size: 18px; }
