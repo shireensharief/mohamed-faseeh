@@ -21,7 +21,7 @@ export default function About() {
       </div>
       <div className="about-grid">
         <div className="about-copy" data-reveal>
-          <h2>Hi, I’m{" "}<br /><em>{person.firstName}.</em></h2>
+          <h2>Hi, I’m{" "}<br /><em>{person.name}.</em></h2>
           {about.paragraphs.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
           <div className="pills">
             <a href={asset(person.resume)} download>Résumé ↓</a>

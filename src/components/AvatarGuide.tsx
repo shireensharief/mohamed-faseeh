@@ -100,6 +100,7 @@ export default function AvatarGuide({ src }: { src?: string }) {
   }, [woken, dismissed]);
 
   const showImage = src && !imageFailed;
+  const toggleCaption = () => { setCaptionOpen((o) => !o); setWoken(true); };
 
   return (
     <div ref={homeRef} className="avatar-home">
@@ -108,29 +109,40 @@ export default function AvatarGuide({ src }: { src?: string }) {
         className={`avatar-guide${docked ? " is-docked" : ""}${docked && dismissed ? " is-dismissed" : ""}`}
         aria-label={`${person.firstName}’s avatar guide`}
       >
-        <div className="avatar-figure">
+        {/* In the hero the "A quick hello" button speaks; once docked, clicking the avatar does. */}
+        <button
+          className="avatar-figure"
+          disabled={!docked}
+          tabIndex={docked ? 0 : -1}
+          aria-expanded={docked ? captionOpen : undefined}
+          aria-label={docked ? (captionOpen ? `Hide ${person.firstName}’s message` : `Hear from ${person.firstName}`) : undefined}
+          title={docked ? "Click me" : undefined}
+          onClick={toggleCaption}
+        >
           {showImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={src}
-              alt={`Full-body cartoon avatar of ${person.name}`}
+              alt=""
               fetchPriority="high"
               onError={() => setImageFailed(true)}
             />
           ) : (
             <AvatarPlaceholder />
           )}
-        </div>
+        </button>
         {docked && (
           <button className="avatar-close" aria-label="Close avatar guide" onClick={() => setDismissed(true)}>
             ×
           </button>
         )}
-        <div className="avatar-controls">
-          <button aria-expanded={captionOpen} onClick={() => { setCaptionOpen((o) => !o); setWoken(true); }}>
-            A quick hello <span aria-hidden="true">↗</span>
-          </button>
-        </div>
+        {!docked && (
+          <div className="avatar-controls">
+            <button aria-expanded={captionOpen} onClick={toggleCaption}>
+              A quick hello <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+        )}
         {captionOpen && (
           <p key={line} className="avatar-caption" role="status">
             {avatarLines[line]}

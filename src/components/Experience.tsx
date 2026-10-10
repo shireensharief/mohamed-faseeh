@@ -1,4 +1,6 @@
-import { certifications, education, roles } from "@/data/content";
+import { certifications, education, person, roles } from "@/data/content";
+import { asset } from "@/lib/asset";
+import TimelineFocus from "./TimelineFocus";
 
 export default function Experience() {
   return (
@@ -12,6 +14,7 @@ export default function Experience() {
         <p>From my first AWS deployment{" "}<br />to keeping a global platform up.</p>
       </div>
 
+      <TimelineFocus />
       <div className="timeline">
         <div className="timeline-track" aria-hidden="true"><span className="timeline-draw" /></div>
         {roles.map((r) => (
@@ -24,8 +27,10 @@ export default function Experience() {
               <p className="eyebrow">{r.eyebrow}</p>
               <h3>{r.title}</h3>
               <h4>{r.org}</h4>
-              <p>{r.summary}</p>
-              <div className="tags">{r.tags.map((t) => <span key={t}>{t}</span>)}</div>
+              <ul className="role-points">
+                {r.points.map((point) => <li key={point}>{point}</li>)}
+              </ul>
+              <a className="role-resume" href={asset(person.resume)} download>Download resume to know more ↓</a>
             </article>
           </div>
         ))}

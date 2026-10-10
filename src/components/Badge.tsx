@@ -39,33 +39,57 @@ export default function Badge({ photo }: { photo?: string }) {
       engine.gravity.y = 0.75;
       const badge = Bodies.rectangle(0, REST_Y, CARD_W, CARD_H, { frictionAir: 0.07, restitution: 0.2 });
       const cord = Constraint.create({
-        pointA: { x: 0, y: 0 }, bodyB: badge, pointB: { x: 0, y: -HALF }, length: 48, stiffness: 0.9, damping: 0.05,
+        // A soft, elastic cord: it stretches a long way when pulled and bounces back.
+        pointA: { x: 0, y: 0 }, bodyB: badge, pointB: { x: 0, y: -HALF }, length: 48, stiffness: 0.1, damping: 0.1,
       });
       Composite.add(engine.world, [badge, cord]);
+      Body.setAngle(badge, -0.075); // hangs with a slight tilt
 
       let frame = 0;
       let idleFrames = 0;
+      let last = 0; // timestamp of the previous frame
+      let carry = 0; // simulation time owed but not yet stepped
+      // Measured once (and on resize) so the render loop never forces a layout.
+      let centerX = scene.clientWidth / 2;
+      const onResize = () => { centerX = scene.clientWidth / 2; };
+      window.addEventListener("resize", onResize);
       let visible = false;
       let dragging = false;
       let grab: MatterNS.Constraint | null = null;
 
-      const render = () => {
-        const { x, y } = badge.position;
-        card.style.transform = `translate(${x}px, ${y - REST_Y}px) rotate(${badge.angle}rad)`;
+      // Previous physics state, so frames between steps can be blended smoothly.
+      let prev = { x: badge.position.x, y: badge.position.y, angle: badge.angle };
+
+      const render = (alpha = 1) => {
+        const x = prev.x + (badge.position.x - prev.x) * alpha;
+        const y = prev.y + (badge.position.y - prev.y) * alpha;
+        const angle = prev.angle + (badge.angle - prev.angle) * alpha;
+        card.style.transform = `translate(${x}px, ${y - REST_Y}px) rotate(${angle}rad)`;
         const line = cordRef.current;
         if (line) {
-          const cx = scene.clientWidth / 2;
+          const cx = centerX;
           line.setAttribute("x1", String(cx));
           line.setAttribute("y1", "0");
-          line.setAttribute("x2", String(cx + x + HALF * Math.sin(badge.angle)));
-          line.setAttribute("y2", String(y - HALF * Math.cos(badge.angle)));
+          line.setAttribute("x2", String(cx + x + HALF * Math.sin(angle)));
+          line.setAttribute("y2", String(y - HALF * Math.cos(angle)));
         }
       };
 
-      const tick = () => {
+      // Step the physics in fixed 60 Hz slices of real elapsed time (the rate its
+      // friction and springs are tuned for), and blend between steps when drawing,
+      // so the swing runs at the same speed and stays fluid on 60 Hz and 120 Hz screens.
+      const STEP = 1000 / 60;
+      const tick = (now: number) => {
         frame = 0;
-        Engine.update(engine, 1000 / 60);
-        render();
+        const elapsed = last ? Math.min(now - last, 50) : STEP;
+        last = now;
+        carry += elapsed;
+        while (carry >= STEP) {
+          prev = { x: badge.position.x, y: badge.position.y, angle: badge.angle };
+          Engine.update(engine, STEP);
+          carry -= STEP;
+        }
+        render(carry / STEP);
         idleFrames++;
         const moving = Math.abs(badge.angularVelocity) > 1e-4 || badge.speed > 0.01;
         if (dragging || idleFrames < 180 || moving) frame = requestAnimationFrame(tick);
@@ -73,6 +97,8 @@ export default function Badge({ photo }: { photo?: string }) {
       const wake = () => {
         if (frame || !visible || document.hidden) return;
         idleFrames = 0;
+        last = 0;
+        carry = 0;
         frame = requestAnimationFrame(tick);
       };
       const sleep = () => { cancelAnimationFrame(frame); frame = 0; };
@@ -94,9 +120,8 @@ export default function Badge({ photo }: { photo?: string }) {
       };
       dragApi.current = {
         start(cx, cy) {
-          const p = local(cx, cy);
-          grab = Constraint.create({ pointA: p, bodyB: badge, stiffness: 0.08, damping: 0.2, length: 0,
-            pointB: { x: p.x - badge.position.x, y: p.y - badge.position.y } });
+          // Pull the card by its centre, on a soft spring, like the reference.
+          grab = Constraint.create({ pointA: local(cx, cy), bodyB: badge, stiffness: 0.08, damping: 0.2, length: 0 });
           Composite.add(engine.world, grab);
           dragging = true;
           wake();
@@ -114,6 +139,7 @@ export default function Badge({ photo }: { photo?: string }) {
         sleep();
         io.disconnect();
         document.removeEventListener("visibilitychange", onVisibility);
+        window.removeEventListener("resize", onResize);
         Composite.clear(engine.world, false);
         Engine.clear(engine);
         dragApi.current = null;
@@ -153,7 +179,7 @@ export default function Badge({ photo }: { photo?: string }) {
     <div className="badge-column">
       <div className="badge-scene" ref={sceneRef}>
         <svg className="badge-cord" aria-hidden="true">
-          <line ref={cordRef} x1="160" y1="0" x2="160" y2="48" stroke="currentColor" strokeWidth="2" />
+          <line ref={cordRef} x1="160" y1="0" x2="160" y2="48" stroke="currentColor" strokeWidth="3" />
         </svg>
         <span className="lanyard" aria-hidden="true">{badge.lanyard}</span>
         <div
@@ -184,7 +210,7 @@ export default function Badge({ photo }: { photo?: string }) {
               <span className="badge-role">{badge.title}</span>
               <span className="badge-footer">
                 <span className="barcode" />
-                <small>{person.monogram} · PORTFOLIO ID</small>
+                <small>MY PORTFOLIO ID</small>
               </span>
             </span>
             <span className="badge-face badge-back">

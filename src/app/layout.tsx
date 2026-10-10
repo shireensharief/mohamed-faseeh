@@ -22,7 +22,13 @@ export const metadata: Metadata = {
   description,
   authors: [{ name: person.name }],
   robots: { index: true, follow: true },
-  icons: { icon: asset("/favicon.svg") },
+  icons: {
+    icon: [
+      { url: asset("/favicon.ico"), sizes: "any" },
+      { url: asset("/favicon-32.png"), type: "image/png", sizes: "32x32" },
+    ],
+    apple: asset("/apple-touch-icon.png"),
+  },
   alternates: { canonical: person.siteUrl },
   openGraph: {
     title,
@@ -40,7 +46,15 @@ export const viewport: Viewport = { themeColor: "#F4F1E8" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={grotesk.variable}>
+    <html lang="en" className={grotesk.variable} suppressHydrationWarning>
+      <head>
+        {/* Apply the saved theme before the first paint so dark mode never flashes light. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem("theme")==="dark"){document.documentElement.dataset.theme="dark";document.querySelector('meta[name="theme-color"]')?.setAttribute("content","#0B0B0B")}}catch(e){}`,
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

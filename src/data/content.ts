@@ -27,7 +27,7 @@ export const nav = [
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Work" },
   { id: "experience", label: "Experience" },
-  { id: "moments", label: "Proud moments" },
+  { id: "moments", label: "Impact" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -35,7 +35,7 @@ export const nav = [
 export const avatarLines: Record<string, string> = {
   hero: "Hi, I'm Faseeh. I keep systems fast, secure and up. Scroll down, let me show you around.",
   skills: "A pocketful of tools. Tap a technology to see how I use it.",
-  work: "From EKS clusters to event-driven Lambdas, here's what I've built.",
+  work: "Observability on autopilot. Here's my work.",
   contact: "Got a system that needs to stay up? Let's talk.",
 };
 
@@ -45,7 +45,7 @@ export const about = {
     "I work across AWS, Docker and Kubernetes, with Dynatrace, Grafana, OpenSearch and the Elastic Stack for logging and monitoring. I lead incident response and root-cause analysis, automate the toil away with Python and Jenkins, and I've carried the pager on 24/7 on-call rotations.",
   ],
   badge: {
-    org: "ALTIMETRIK",
+    org: "SAMSUNG",
     unit: "RELIABILITY",
     title: "SITE RELIABILITY · SRE",
     lanyard: "SAMSUNG · SRE",
@@ -66,14 +66,15 @@ export const about = {
   quoteNote: "ONE ENGINEER. ALWAYS ON.",
 };
 
-export type SkillFamily = "cloud" | "containers" | "monitoring" | "cicd" | "practices";
+// The 15 skills and 6 categories from the previous portfolio, in the same order.
+export type SkillFamily = "cloud" | "containers" | "monitoring" | "cicd" | "os" | "iac";
 
 export type Skill = {
   name: string;
-  glyph: string;
+  icon: string; // logo in public/icons (from the previous portfolio)
   family: SkillFamily;
   story: string;
-  project: { label: string; title: string; href?: string };
+  project?: { title: string; href: string };
 };
 
 export const skillFilters: { id: "all" | SkillFamily; label: string }[] = [
@@ -82,78 +83,51 @@ export const skillFilters: { id: "all" | SkillFamily; label: string }[] = [
   { id: "containers", label: "Containers" },
   { id: "monitoring", label: "Monitoring" },
   { id: "cicd", label: "CI/CD" },
-  { id: "practices", label: "Practices" },
+  { id: "os", label: "OS" },
+  { id: "iac", label: "IaC" },
 ];
 
 const gh = (repo: string) => `https://github.com/mohamedfaseeh/${repo}`;
+const netflix = { title: "Netflix Clone on Amazon EKS", href: gh("DevSecOps-Project") };
 
 export const skills: Skill[] = [
-  { name: "AWS", glyph: "A", family: "cloud",
-    story: "EC2, ECS, EKS, Lambda, S3, IAM, API Gateway and CloudWatch. I've hosted, secured and monitored production workloads on AWS in every role.",
-    project: { label: "SEE IT IN", title: "AWS Infrastructure Automation", href: gh("Load-Balanced-Web-Application") } },
-  { name: "Terraform", glyph: "T", family: "cloud",
-    story: "Infrastructure as code from VPC to EKS: modular, variable-driven and repeatable, so environments are rebuilt rather than hand-patched.",
-    project: { label: "SEE IT IN", title: "Highly Available Web App on AWS", href: gh("Load-Balanced-Web-Application") } },
-  { name: "Lambda", glyph: "λ", family: "cloud",
-    story: "Serverless automation in Python and boto3, wired to EventBridge and CloudTrail so governance happens the moment a resource is created.",
-    project: { label: "SEE IT IN", title: "Auto-Tagging with Lambda & EventBridge", href: gh("Auto-Tag-AWS-Resources") } },
-  { name: "Linux", glyph: "L", family: "cloud",
-    story: "Day-to-day Linux system administration: services, permissions, logs and the shell work behind every deployment and incident.",
-    project: { label: "USED AT", title: "Avasoft · Chargebee · Altimetrik" } },
-  { name: "Docker", glyph: "D", family: "containers",
+  { name: "AWS", icon: "/icons/aws.webp", family: "cloud",
+    story: "EC2, ECS, EKS, Lambda, S3, IAM, API Gateway and CloudWatch. Hosting, securing and monitoring production workloads on AWS.",
+    project: { title: "Highly Available Web App on AWS", href: gh("Load-Balanced-Web-Application") } },
+  { name: "Docker", icon: "/icons/docker.svg", family: "containers",
     story: "Containerised applications with lean Dockerfiles so every environment, from laptop to production, runs the same image.",
-    project: { label: "SEE IT IN", title: "Netflix Clone on Amazon EKS", href: gh("DevSecOps-Project") } },
-  { name: "Kubernetes", glyph: "K", family: "containers",
+    project: netflix },
+  { name: "Kubernetes", icon: "/icons/kubernetes.webp", family: "containers",
     story: "Amazon EKS clusters with Helm-managed releases, autoscaling and cluster-level monitoring for resilient microservices.",
-    project: { label: "SEE IT IN", title: "Netflix Clone on Amazon EKS", href: gh("DevSecOps-Project") } },
-  { name: "Helm", glyph: "H", family: "containers",
-    story: "Version-controlled, repeatable Kubernetes releases, deployed automatically from the pipeline.",
-    project: { label: "SEE IT IN", title: "Netflix Clone on Amazon EKS", href: gh("DevSecOps-Project") } },
-  { name: "Dynatrace", glyph: "◆", family: "monitoring",
-    story: "End-to-end observability for Samsung's global e-commerce platform: payments, checkout and order management.",
-    project: { label: "USED AT", title: "Samsung (Altimetrik)" } },
-  { name: "Grafana", glyph: "G", family: "monitoring",
-    story: "Dashboards for application, pod and node health, built so on-call engineers see the problem before customers do.",
-    project: { label: "SEE IT IN", title: "Netflix Clone on Amazon EKS", href: gh("DevSecOps-Project") } },
-  { name: "Prometheus", glyph: "P", family: "monitoring",
-    story: "Cluster metrics with Alertmanager routing, plus Blackbox Exporter probes for uptime from the outside in.",
-    project: { label: "SEE IT IN", title: "Netflix Clone on Amazon EKS", href: gh("DevSecOps-Project") } },
-  { name: "OpenSearch", glyph: "O", family: "monitoring",
-    story: "Log search and dashboards for a global platform, the first stop in every root-cause analysis.",
-    project: { label: "USED AT", title: "Samsung (Altimetrik)" } },
-  { name: "Elastic Stack", glyph: "E", family: "monitoring",
-    story: "Centralised logging with Elasticsearch, Fluentd/Logstash and Kibana, so every service tells its story in one place.",
-    project: { label: "USED AT", title: "Avasoft" } },
-  { name: "Splunk", glyph: "S", family: "monitoring",
-    story: "Searching and correlating machine data while tracking errors and job executions across services.",
-    project: { label: "IN THE TOOLKIT", title: "Monitoring & log analytics" } },
-  { name: "GitHub", glyph: "⌘", family: "cicd",
+    project: netflix },
+  { name: "Prometheus", icon: "/icons/prometheus.svg", family: "monitoring",
+    story: "Cluster and application metrics with Alertmanager routing, so problems page someone before customers notice.",
+    project: netflix },
+  { name: "Grafana", icon: "/icons/grafana.webp", family: "monitoring",
+    story: "Dashboards for application, pod and node health, built so on-call engineers see the problem first.",
+    project: netflix },
+  { name: "Dynatrace", icon: "/icons/dynatrace.svg", family: "monitoring",
+    story: "End-to-end observability for a global e-commerce platform: payments, checkout and order management." },
+  { name: "OpenSearch", icon: "/icons/opensearch.svg", family: "monitoring",
+    story: "Log search and dashboards for a global platform, the first stop in every root-cause analysis." },
+  { name: "Blackbox Exporter", icon: "/icons/blackbox.webp", family: "monitoring",
+    story: "Probing endpoints from the outside in for uptime and latency, feeding Prometheus alerts." },
+  { name: "GitHub", icon: "/icons/github.svg", family: "cicd",
     story: "Source control, pull-request reviews and pre-deployment checks before anything ships.",
-    project: { label: "SEE IT ON", title: "github.com/mohamedfaseeh", href: "https://github.com/mohamedfaseeh" } },
-  { name: "GitLab CI/CD", glyph: "∞", family: "cicd",
-    story: "Pipelines that build, test and deploy, including versioned database schema changes with Liquibase.",
-    project: { label: "USED AT", title: "Avasoft" } },
-  { name: "Jenkins", glyph: "J", family: "cicd",
-    story: "Build, test, Trivy scan, image push and Helm deploy in one pipeline, plus scheduled SRE automations.",
-    project: { label: "SEE IT IN", title: "Netflix Clone on Amazon EKS", href: gh("DevSecOps-Project") } },
-  { name: "Liquibase", glyph: "Q", family: "cicd",
-    story: "Database schema changes versioned and rolled out through GitLab CI/CD, never by hand.",
-    project: { label: "USED AT", title: "Avasoft" } },
-  { name: "Python", glyph: "Py", family: "practices",
-    story: "Automation with boto3, cron jobs and Slack/Mattermost bots, which cut manual triage by 80%.",
-    project: { label: "SEE IT IN", title: "AWS IAM User Provisioning", href: gh("AWS-IAM-User-Provisioning") } },
-  { name: "Incident response", glyph: "!", family: "practices",
-    story: "Leading incidents, RCA and post-incident reviews while holding SLA compliance, and fixing causes, not symptoms.",
-    project: { label: "IMPACT", title: "75% fewer recurring incidents" } },
-  { name: "On-call", glyph: "↻", family: "practices",
-    story: "24/7 rotations for critical production issues, backed by runbooks and alerting standards.",
-    project: { label: "USED AT", title: "Chargebee · Altimetrik" } },
-];
-
-export const alsoInToolkit = [
-  "Bash", "boto3", "AWS CLI", "EventBridge", "CloudTrail", "API Gateway", "WAF",
-  "Nginx", "Trivy", "SonarQube", "Alertmanager", "Blackbox Exporter", "eksctl",
-  "Runbooks", "RCA", "Change management", "Slack / Mattermost alerts",
+    project: { title: "github.com/mohamedfaseeh", href: "https://github.com/mohamedfaseeh" } },
+  { name: "GitLab CI/CD", icon: "/icons/gitlab.svg", family: "cicd",
+    story: "Pipelines that build, test and deploy, including versioned database schema changes." },
+  { name: "Linux", icon: "/icons/linux.svg", family: "os",
+    story: "Day-to-day Linux system administration: services, permissions, logs and the shell work behind every deployment and incident." },
+  { name: "Terraform", icon: "/icons/terraform.webp", family: "iac",
+    story: "Infrastructure as code from VPC to EKS: modular, variable-driven and repeatable, so environments are rebuilt, not hand-patched.",
+    project: { title: "Highly Available Web App on AWS", href: gh("Load-Balanced-Web-Application") } },
+  { name: "Elastic Stack", icon: "/icons/elastic-stack.webp", family: "monitoring",
+    story: "Centralised logging with Elasticsearch, Logstash and Kibana, so every service tells its story in one place." },
+  { name: "Liquibase", icon: "/icons/liquibase.webp", family: "cicd",
+    story: "Database schema changes versioned and rolled out through CI/CD, never by hand." },
+  { name: "Splunk", icon: "/icons/splunk.webp", family: "monitoring",
+    story: "Searching and correlating machine data while tracking errors and job executions across services." },
 ];
 
 export type Project = {
@@ -166,7 +140,7 @@ export type Project = {
   featured?: boolean;
   stamp?: [string, string];
   personalStamp?: string[];
-  screen: { kicker: string; title: string; banner: string; rows: [string, string][] };
+  screen: { kicker: string; title: string }; // the laptop on the card: address-bar path and app name
 };
 
 export const projects: Project[] = [
@@ -183,8 +157,6 @@ export const projects: Project[] = [
     screen: {
       kicker: "CLUSTER / EKS",
       title: "netflix-prod",
-      banner: "All pods healthy.",
-      rows: [["Pipeline", "build · scan · deploy"], ["Nodes", "autoscaling on"], ["Alerts", "0 firing"]],
     },
   },
   {
@@ -198,8 +170,6 @@ export const projects: Project[] = [
     screen: {
       kicker: "TERRAFORM / APPLY",
       title: "web-ha-stack",
-      banner: "Cross-AZ, self-healing.",
-      rows: [["Load balancer", "2 healthy targets"], ["Subnets", "2 zones"], ["Plan", "0 to change"]],
     },
   },
   {
@@ -213,8 +183,6 @@ export const projects: Project[] = [
     screen: {
       kicker: "IAM / PROVISION",
       title: "iam-onboard.py",
-      banner: "90% less setup time.",
-      rows: [["Users", "created"], ["Console", "reset on login"], ["Policies", "attached"]],
     },
   },
   {
@@ -229,53 +197,63 @@ export const projects: Project[] = [
     screen: {
       kicker: "LAMBDA / EVENTBRIDGE",
       title: "auto-tagger",
-      banner: "Every resource, owned.",
-      rows: [["CloudTrail", "event received"], ["Creator", "ARN resolved"], ["Tags", "applied"]],
     },
   },
 ];
 
+// Company, role, dates and every point are copied word for word from the previous portfolio.
 export type Role = {
   year: string;
   period: string;
   eyebrow: string;
   title: string;
   org: string;
-  summary: string;
-  tags: string[];
+  points: string[];
 };
 
 export const roles: Role[] = [
   {
     year: "2025",
-    period: "December 2025 – Present",
+    period: "Dec 2025 - Present",
     eyebrow: "SITE RELIABILITY",
     title: "Site Reliability Engineer",
     org: "Samsung (Altimetrik)",
-    summary:
-      "Built end-to-end observability with Dynatrace, Grafana and OpenSearch for Samsung's global e-commerce platform, covering payments, checkout and order management. Lead incident response, RCA and post-incident reviews within SLA. Automated SRE operations with Python, Jenkins, cron jobs and Slack/Mattermost, cutting manual triage by 80%, and partnered with engineering on long-term fixes that reduced recurring incidents by 75%.",
-    tags: ["Dynatrace", "Grafana", "OpenSearch", "Python", "Jenkins", "Incident response", "Runbooks"],
+    points: [
+      "Built end-to-end observability with Dynatrace, Grafana, and OpenSearch for Samsung’s global e-commerce platform, covering payments, checkout, and order management.",
+      "Led incident response, RCA, and post-incident reviews while maintaining SLA compliance.",
+      "Automated SRE operations with Python, Jenkins, CronJobs, and Slack/Mattermost, cutting manual triage by 80%.",
+      "Partnered with engineering teams on long-term fixes, reducing recurring incidents by 75%.",
+      "Supported releases and change management, and set up alerting standards and runbooks."
+    ]
   },
   {
     year: "2024",
-    period: "April 2024 – August 2025",
+    period: "April 2024 - Aug 2025",
     eyebrow: "CLOUD RELIABILITY",
     title: "Cloud Reliability Engineer",
     org: "Chargebee",
-    summary:
-      "Monitored AWS infrastructure, tracking errors and job executions across services. Resolved incidents and service requests, escalating critical issues to module owners or third parties. Ran deployment pre-checks, reviewed and approved PRs, deployed artifacts to EC2 and ECS, fixed 5xx build failures with root-cause analysis, and took part in 24/7 on-call rotations.",
-    tags: ["AWS", "EC2", "ECS", "Root cause analysis", "On-call", "Deployments"],
+    points: [
+      "Monitored AWS infrastructure, tracking errors and job executions across services.",
+      "Resolved incidents and service requests, escalating critical issues to module owners or third-party teams.",
+      "Ran deployment pre-checks, reviewed and approved PRs, and deployed artifacts to EC2 and ECS.",
+      "Fixed build issues such as 5xx errors and performed root cause analysis for failures.",
+      "Participated in 24/7 on-call rotations for critical production issues."
+    ]
   },
   {
     year: "2023",
-    period: "February 2023 – August 2023",
+    period: "Feb 2023 - Aug 2023",
     eyebrow: "CLOUD & DEVOPS",
     title: "Cloud & DevOps Engineer",
     org: "Avasoft",
-    summary:
-      "Managed EC2, Lambda and S3 hosting and integrated APIs through API Gateway. Secured workloads with least-privilege IAM policies and WAF. Rolled out Liquibase with GitLab CI/CD for versioned schema changes, containerised applications with Docker on Linux, and set up the Elastic Stack, Prometheus, Grafana and Blackbox Exporter for monitoring.",
-    tags: ["AWS", "IAM", "WAF", "GitLab CI/CD", "Liquibase", "Docker", "Elastic Stack"],
-  },
+    points: [
+      "Managed EC2, Lambda, and S3 hosting, and integrated APIs through AWS API Gateway.",
+      "Secured workloads with least-privilege IAM policies and WAF configurations.",
+      "Rolled out Liquibase with GitLab CI/CD for versioned database schema changes.",
+      "Containerized applications with Docker for consistent environments on Linux.",
+      "Set up Elastic Stack, Prometheus, Grafana, and Blackbox Exporter for monitoring and logging."
+    ]
+  }
 ];
 
 export const education = {
@@ -294,9 +272,8 @@ export const certifications = [
 
 export const stats = [
   { value: 3, suffix: "+", label: "Years of experience" },
-  { value: 3, suffix: "", label: "Companies" },
   { value: 15, suffix: "+", label: "Technologies" },
-  { region: "24 / 7", label: "On-call reliability" },
+  { text: "24/7", label: "On-call reliability" },
 ];
 
 export const moments = [
@@ -304,3 +281,179 @@ export const moments = [
   { symbol: "75%", eyebrow: "FEWER REPEAT INCIDENTS", title: "Fix the cause.", text: "Partnered with engineering teams on long-term fixes instead of patching the same failure twice." },
   { symbol: "✦", eyebrow: "OBSERVABILITY AT SCALE", title: "See it first.", text: "End-to-end monitoring for Samsung's global e-commerce platform: payments, checkout and order management." },
 ];
+
+// Project detail views: copied word for word from the previous portfolio.
+export type ProjectDetail = {
+  responsibilities: { title: string; items: string[] }[];
+  technologies: { title: string; items: string }[];
+  outcomes: string[];
+};
+
+export const projectDetails: Record<string, ProjectDetail> = {
+  "netflix-eks": {
+    responsibilities: [
+      {
+        title: "Infrastructure & Deployment",
+        items: [
+          "Provisioned AWS cloud infrastructure using Terraform, including VPC, subnets, IAM roles, security groups, and Amazon EKS cluster.",
+          "Deployed microservices using Kubernetes Helm charts for version-controlled, repeatable releases.",
+          "Containerized application components using optimized Dockerfiles."
+        ]
+      },
+      {
+        title: "CI/CD Automation",
+        items: [
+          "Built a complete CI/CD pipeline in Jenkins, automating build, test, security scan, Docker image push, and deploy to EKS.",
+          "Integrated Trivy for container vulnerability scanning.",
+          "Automated Helm deployments to EKS as part of the pipeline."
+        ]
+      },
+      {
+        title: "Monitoring & Logging",
+        items: [
+          "Implemented Prometheus for cluster metrics and Alertmanager for alerting.",
+          "Created custom Grafana dashboards for application, pod, and node-level monitoring.",
+          "Configured centralized logging using the EFK Stack."
+        ]
+      }
+    ],
+    technologies: [
+      {
+        title: "Cloud & Infrastructure",
+        items: "AWS (EKS, EC2, VPC, IAM, CloudWatch), Terraform, eksctl, Helm"
+      },
+      {
+        title: "DevOps & CI/CD",
+        items: "Jenkins, Docker, Git, Trivy, SonarQube"
+      },
+      {
+        title: "Monitoring & Logging",
+        items: "Prometheus, Grafana, Alertmanager, EFK Stack"
+      }
+    ],
+    outcomes: [
+      "Achieved fully automated CI/CD delivery with zero manual deployment steps.",
+      "Ensured secure and reliable container images through integrated vulnerability scanning.",
+      "Improved application uptime, scalability, and resilience using EKS autoscaling.",
+      "Implemented complete observability with real-time monitoring and log aggregation."
+    ]
+  },
+  "aws-infra": {
+    responsibilities: [
+      {
+        title: "Infrastructure as Code",
+        items: [
+          "Designed and implemented AWS infrastructure entirely using Terraform.",
+          "Defined VPC, public subnets, Internet Gateway, Route Tables, Security Groups, EC2 Instances, and ALB.",
+          "Used Terraform variables and outputs for flexible configuration."
+        ]
+      },
+      {
+        title: "Automation & Configuration",
+        items: [
+          "Implemented automated instance provisioning using user_data to install Nginx at launch.",
+          "Configured Target Group and Health Checks within ALB.",
+          "Verified automatic failover behavior when one instance becomes unhealthy."
+        ]
+      }
+    ],
+    technologies: [
+      {
+        title: "Cloud Platform",
+        items: "AWS (VPC, EC2, ALB, Internet Gateway, Security Groups)"
+      },
+      {
+        title: "IaC Tool",
+        items: "Terraform"
+      },
+      {
+        title: "Concepts",
+        items: "Infrastructure as Code, Load Balancing, High Availability"
+      }
+    ],
+    outcomes: [
+      "Deployed a highly available, fault-tolerant web infrastructure with end-to-end automation.",
+      "Implemented cross-AZ load balancing and automated Nginx provisioning.",
+      "Designed a clean, modular IaC structure with reusable components.",
+      "Validated automatic failover and ALB health checks."
+    ]
+  },
+  "iam-automation": {
+    responsibilities: [
+      {
+        title: "IAM User & Group Automation",
+        items: [
+          "Developed a Python script using boto3 to automate IAM user provisioning.",
+          "Enabled optional AWS Console login for users with password reset enforcement.",
+          "Automated policy attachment by allowing input of AWS-managed policies dynamically."
+        ]
+      },
+      {
+        title: "Security & Governance",
+        items: [
+          "Followed AWS best practices for secure credential management.",
+          "Implemented input validation for password and policy names.",
+          "Used IAM roles and policies for restricted permissions."
+        ]
+      }
+    ],
+    technologies: [
+      {
+        title: "Cloud & Infrastructure",
+        items: "AWS (IAM, CLI)"
+      },
+      {
+        title: "Programming & SDK",
+        items: "Python, boto3"
+      },
+      {
+        title: "Concepts",
+        items: "Automation, Access Management, Security"
+      }
+    ],
+    outcomes: [
+      "Reduced manual IAM setup time by 90%.",
+      "Delivered a secure, reusable Python-based automation tool."
+    ]
+  },
+  "auto-tagging": {
+    responsibilities: [
+      {
+        title: "Event-Driven Auto-Tagging",
+        items: [
+          "Designed a serverless automation engine using AWS Lambda (Python).",
+          "Built a tagging mechanism that detects the resource creator using CloudTrail.",
+          "Ensured successful tagging for EC2 instances and S3 buckets."
+        ]
+      },
+      {
+        title: "Lambda Function Development",
+        items: [
+          "Developed a Python-based AWS Lambda function using boto3.",
+          "Implemented logic to parse events, identify creator ARN, and apply tags.",
+          "Added logging and error handling for auditing."
+        ]
+      }
+    ],
+    technologies: [
+      {
+        title: "AWS Services",
+        items: "CloudTrail, EventBridge, Lambda, EC2, S3, IAM"
+      },
+      {
+        title: "Programming",
+        items: "Python, boto3"
+      },
+      {
+        title: "Concepts",
+        items: "Cloud Governance, Tagging Compliance, Serverless"
+      }
+    ],
+    outcomes: [
+      "Ensured 100% tagging compliance for resource creators.",
+      "Improved traceability, accountability, and cloud cost visibility.",
+      "Eliminated manual tagging effort and human error.",
+      "Built a scalable, event-driven automation system."
+    ]
+  }
+};

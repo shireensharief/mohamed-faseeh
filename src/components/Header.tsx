@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { nav, person } from "@/data/content";
+import ThemeToggle from "./ThemeToggle";
+import { asset } from "@/lib/asset";
 
 export default function Header() {
   const [active, setActive] = useState<string | null>(null);
@@ -27,7 +29,8 @@ export default function Header() {
   return (
     <header className="site-header">
       <a className="monogram" href="#home" aria-label={`${person.name}, back to top`}>
-        {person.monogram}<span>·</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={asset("/logo.webp")} alt="" width={48} height={48} />
       </a>
       <button
         className="menu-toggle"
@@ -49,9 +52,7 @@ export default function Header() {
           </a>
         ))}
       </nav>
-      <a className="header-note" href="#contact">
-        <span className="dot" /> Let’s make it happen ↗
-      </a>
+      <ThemeToggle />
     </header>
   );
 }

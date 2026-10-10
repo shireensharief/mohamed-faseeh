@@ -32,6 +32,7 @@ export default function Motion() {
         const raf = (time: number) => lenis?.raf(time * 1000);
         if (matchMedia("(pointer: fine)").matches) {
           lenis = new Lenis({ duration: 1.05, anchors: true });
+          (window as Window & { __lenis?: typeof lenis }).__lenis = lenis; // lets dialogs pause scrolling
           lenis.on("scroll", ScrollTrigger.update);
           gsap.ticker.add(raf);
         }
@@ -51,6 +52,7 @@ export default function Motion() {
         return () => {
           gsap.ticker.remove(raf);
           lenis?.destroy();
+          delete (window as Window & { __lenis?: typeof lenis }).__lenis;
         };
       });
 

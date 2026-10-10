@@ -5,7 +5,7 @@ export default function Moments() {
   return (
     <section id="moments" className="section moments">
       <div className="section-marker">
-        <span>05 — PROUD MOMENTS</span>
+        <span>05 — IMPACT</span>
         <span>THE WORK ADDS UP</span>
       </div>
       <h2 data-reveal>Small fixes.{" "}<br /><em>Meaningful uptime.</em></h2>
@@ -13,8 +13,8 @@ export default function Moments() {
       <div className="stats">
         {stats.map((s) => (
           <div key={s.label}>
-            {"region" in s ? (
-              <strong className="region-stat">{s.region}</strong>
+            {"text" in s ? (
+              <strong>{s.text}</strong>
             ) : (
               <strong><CountUp value={s.value!} />{s.suffix}</strong>
             )}

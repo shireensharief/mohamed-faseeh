@@ -18,7 +18,7 @@ export default function Hero() {
       <div className="hero-ghost" aria-hidden="true">
         <svg viewBox="0 0 1100 260" preserveAspectRatio="xMidYMin meet">
           <text
-            x="550" y="226" textAnchor="middle" fill="#e6e3da"
+            x="550" y="226" textAnchor="middle" fill="currentColor"
             fontFamily="Arial, Helvetica, sans-serif" fontWeight="700" fontSize="275" letterSpacing="-22"
           >
             {person.ghost}
@@ -33,20 +33,21 @@ export default function Hero() {
       <AvatarGuide src={findAvatar()} />
 
       <div className="hero-copy">
-        <p className="eyebrow">
+        <p className="eyebrow hero-fade" style={{ "--d": "0.05s" } as React.CSSProperties}>
           {person.name.toUpperCase()} · SITE RELIABILITY ENGINEER · {person.location.toUpperCase()}
         </p>
         <h1>
           <span className="sr-only">{person.name} — </span>
-          Site Reliability
-          <br />& Cloud
-          <br /><em>Engineer.</em>
+          {/* each line slides up from behind its own mask on load */}
+          <span className="h1-line"><span>Site Reliability</span></span>{" "}
+          <span className="h1-line"><span>& Cloud</span></span>{" "}
+          <span className="h1-line"><em>Engineer.</em></span>
         </h1>
-        <p className="hero-tagline">
-          Fast systems. Calm on-call.
+        <p className="hero-tagline hero-fade" style={{ "--d": "0.75s" } as React.CSSProperties}>
+          Fast systems. Calm on-call.{" "}
           <br /><strong>Reliable by design.</strong>
         </p>
-        <div className="hero-actions">
+        <div className="hero-actions hero-fade" style={{ "--d": "0.9s" } as React.CSSProperties}>
           <a className="button primary" href="#projects">
             Explore work <span aria-hidden="true">→</span>
           </a>
@@ -62,7 +63,7 @@ export default function Hero() {
       </div>
 
       <div className="hero-bottom">
-        <span>AWS / KUBERNETES / OBSERVABILITY</span>
+        <span>OBSERVABILITY / MONITORING / AUTOMATION</span>
         <span>KEEPING SYSTEMS UP. AROUND THE CLOCK.</span>
         <span>SCROLL TO MEET ME ↓</span>
       </div>
