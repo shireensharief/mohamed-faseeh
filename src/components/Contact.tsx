@@ -1,6 +1,7 @@
 import { person } from "@/data/content";
 import { asset } from "@/lib/asset";
 import ContactForm from "./ContactForm";
+import FooterShell from "./FooterShell";
 
 export default function Contact() {
   return (
@@ -46,6 +47,7 @@ export default function Contact() {
             <a href={person.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
             <a href={person.github} target="_blank" rel="noreferrer">GitHub ↗</a>
           </div>
+          <FooterShell />
         </div>
         <ContactForm />
       </div>

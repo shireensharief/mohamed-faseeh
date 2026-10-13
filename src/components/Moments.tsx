@@ -1,5 +1,6 @@
 import { moments, stats } from "@/data/content";
 import CountUp from "./CountUp";
+import Heartbeat from "./Heartbeat";
 
 export default function Moments() {
   return (
@@ -26,7 +27,11 @@ export default function Moments() {
       <div className="moment-cards">
         {moments.map((m) => (
           <article key={m.eyebrow} data-reveal>
-            <span className="moment-symbol">{m.symbol}</span>
+            {"monitor" in m && m.monitor ? (
+              <Heartbeat systems={m.monitor} />
+            ) : (
+              <span className="moment-symbol">{m.symbol}</span>
+            )}
             <p className="eyebrow">{m.eyebrow}</p>
             <h3>{m.title}</h3>
             <p>{m.text}</p>

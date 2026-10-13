@@ -51,7 +51,7 @@ export const about = {
     lanyard: "SAMSUNG · SRE",
     stats: [
       { value: 3, suffix: "+", label: "YEARS" },
-      { value: 3, suffix: "", label: "COMPANIES" },
+      { value: 24, suffix: "/7", label: "ON-CALL" },
     ],
     backLine: "ON CALL ACROSS GLOBAL E-COMMERCE",
     backNote: "From the first alert to the root cause.",
@@ -279,7 +279,7 @@ export const stats = [
 export const moments = [
   { symbol: "80%", eyebrow: "LESS MANUAL TRIAGE", title: "Automate the toil.", text: "SRE operations automated with Python, Jenkins, cron jobs and Slack/Mattermost alerts at Samsung (Altimetrik)." },
   { symbol: "75%", eyebrow: "FEWER REPEAT INCIDENTS", title: "Fix the cause.", text: "Partnered with engineering teams on long-term fixes instead of patching the same failure twice." },
-  { symbol: "✦", eyebrow: "OBSERVABILITY AT SCALE", title: "See it first.", text: "End-to-end monitoring for Samsung's global e-commerce platform: payments, checkout and order management." },
+  { symbol: "✦", monitor: ["PAYMENTS", "CHECKOUT", "ORDERS"], eyebrow: "OBSERVABILITY AT SCALE", title: "See it first.", text: "End-to-end monitoring for Samsung's global e-commerce platform: payments, checkout and order management." },
 ];
 
 // Project detail views: copied word for word from the previous portfolio.
